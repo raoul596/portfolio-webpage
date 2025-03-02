@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Car</title>
     <link rel="stylesheet" href="css/styles.css">
-    <script src="script/projects.js"></script>
+    <script defer src="script/projects.js"></script>
     <script defer src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body class="dark-mode">
@@ -29,7 +29,20 @@
         <h2>Project Images</h2>
         <div class="image-row">
             <div class="image-container">
-                <img src="images/project_car/racetracker_croped_29864271_476096.jpg" alt="Project Car">
+                <a href="#" class="image-link">
+                    <img src="images/project_car/racetracker_croped_29864271_476096.jpg" alt="Project Car">
+                </a>
+            </div>
+            <div class="text-container">
+                <h3>Step 1</h3>
+                <p>Explain what is happening in this image.</p>
+            </div>
+        </div>
+        <div class="image-row">
+            <div class="image-container">
+                <a href="#" class="image-link">
+                    <img src="images/project_car/racetracker_croped_29864271_476096.jpg" alt="Project Car">
+                </a>
             </div>
             <div class="text-container">
                 <h3>Step 1</h3>
@@ -38,16 +51,21 @@
         </div>
     </section>
 
+    <div id="image-modal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modal-img">
+    </div>
+
     <section id="contact">
         <h2>Contact</h2>
         <div class="contact-icons">
-            <a href="mailto:your.email@example.com" class="contact-btn">
+            <a href="mailto:raoul.ursum@gmail.com" class="contact-btn">
                 <i data-lucide="mail"></i>
             </a>
-            <a href="https://linkedin.com/in/yourprofile" target="_blank" class="contact-btn">
+            <a href="https://www.linkedin.com/in/raoul-ursum-626956b2/" target="_blank" class="contact-btn">
                 <i data-lucide="linkedin"></i>
             </a>
-            <a href="https://github.com/yourgithub" target="_blank" class="contact-btn">
+            <a href="https://github.com/raoul596" target="_blank" class="contact-btn">
                 <i data-lucide="github"></i>
             </a>
         </div>
@@ -56,13 +74,5 @@
     <footer>
         <p>&copy; <span id="current-year"></span> Raoul Ursum. All rights reserved.</p>
     </footer>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            lucide.createIcons();
-        });
-    </script>
-
 </body>
 </html>
-

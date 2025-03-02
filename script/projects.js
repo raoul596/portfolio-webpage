@@ -13,22 +13,92 @@ const projects = [
     { title: "Camera Drone", link: "camera_drone.html" }
 ];
 
-document.addEventListener("DOMContentLoaded", function () {
+// Initialize Lucide icons
+function initializeIcons() {
+    if (typeof lucide !== "undefined") {
+        lucide.createIcons();
+    } else {
+        console.warn("Lucide library is not loaded.");
+    }
+}
+
+// Set project title dynamically
+function setProjectTitle() {
+    const titleElement = document.getElementById("project-title");
+    const currentPage = window.location.pathname.split("/").pop();
+    const project = projects.find(p => p.link === currentPage);
+    
+    if (titleElement && project) {
+        titleElement.textContent = project.title;
+    } else {
+        console.warn("Project title could not be set.");
+    }
+}
+
+// Set next project button
+function setNextProject() {
+    const nextProjectBtn = document.getElementById("next-project");
     const currentPage = window.location.pathname.split("/").pop();
     const currentIndex = projects.findIndex(p => p.link === currentPage);
-
-    if (currentIndex !== -1) {
-        // Set project title
-        document.getElementById("project-title").textContent = projects[currentIndex].title;
-
-        // Set next project link (loops to first project if at the last one)
-        const nextProject = projects[(currentIndex + 1) % projects.length];
-        document.getElementById("next-project").href = nextProject.link;
+    
+    if (nextProjectBtn && currentIndex !== -1 && currentIndex < projects.length - 1) {
+        nextProjectBtn.href = projects[currentIndex + 1].link;
+    } else {
+        nextProjectBtn.style.display = "none"; // Hide button if no next project
     }
-});
+}
 
+// Set up image modal functionality
+function setupImageModal() {
+    const modal = document.getElementById("image-modal");
+    const modalImg = document.getElementById("modal-img");
+    const closeBtn = document.querySelector(".close");
+    
+    if (!modal || !modalImg || !closeBtn) {
+        console.warn("Modal elements not found in the DOM.");
+        return;
+    }
+    
+    if (window.innerWidth > 768) {
+        document.querySelectorAll(".image-link img").forEach(img => {
+            img.addEventListener("click", function(event) {
+                event.preventDefault();
+                openModal(this.src);
+            });
+        });
+    }
+    
+    closeBtn.addEventListener("click", closeModal);
+    modal.addEventListener("click", function (e) {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+}
+
+// Open modal with selected image
+function openModal(imageSrc) {
+    const modal = document.getElementById("image-modal");
+    const modalImg = document.getElementById("modal-img");
+    
+    if (modal && modalImg) {
+        modal.style.display = "flex";
+        modalImg.src = imageSrc;
+    }
+}
+
+// Close modal
+function closeModal() {
+    const modal = document.getElementById("image-modal");
+    if (modal) {
+        modal.style.display = "none";
+    }
+}
+
+// Initialize everything on page load
 document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("current-year").textContent = new Date().getFullYear();
+    initializeIcons();
+    setProjectTitle();
+    setNextProject();
+    setupImageModal();
 });
-
-
