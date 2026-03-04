@@ -63,10 +63,111 @@ footer {
     padding: 0 20px;
 }
 
+#about p,
+#about li {
+    text-align: justify;
+    text-justify: inter-word;
+    text-align-last: left;
+    hyphens: auto;
+}
+
 #project-description {
     max-width: 900px;
     margin: 0 auto;
     padding: 0 20px;
+}
+
+#project-description p,
+#project-description li {
+    text-align: justify;
+    text-justify: inter-word;
+    text-align-last: left;
+    hyphens: auto;
+}
+
+.projects-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.projects-header {
+    max-width: 1200px;
+    margin: 0 auto 10px auto;
+    padding: 0 20px;
+    position: relative;
+    text-align: center;
+}
+
+.projects-header h2 {
+    margin: 0;
+}
+
+.projects-toggle-label {
+    font-size: 14px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 52px;
+    height: 28px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+    background-color: #607486;
+    border-radius: 999px;
+    transition: background-color 0.25s ease;
+}
+
+.slider::before {
+    content: "";
+    position: absolute;
+    height: 22px;
+    width: 22px;
+    left: 3px;
+    top: 3px;
+    background-color: var(--light);
+    border-radius: 50%;
+    transition: transform 0.25s ease;
+}
+
+.switch input:checked + .slider {
+    background-color: var(--accent);
+}
+
+.switch input:checked + .slider::before {
+    transform: translateX(24px);
+}
+
+.switch input:focus-visible + .slider {
+    outline: 2px solid var(--hover);
+    outline-offset: 2px;
+}
+
+@media (max-width: 576px) {
+    .projects-header {
+        text-align: left;
+    }
+
+    .projects-toggle {
+        position: static;
+        transform: none;
+        margin-top: 10px;
+    }
 }
 
 /* Skills Section */
@@ -118,6 +219,21 @@ footer {
 /* Project Title */
 .project h3 {
     margin-bottom: 10px;
+}
+
+.project-grid .project {
+    transition: opacity 0.26s ease, transform 0.26s ease;
+    transform-origin: center top;
+}
+
+.project-grid .project.project-hiding {
+    opacity: 0;
+    transform: scale(0.97);
+    pointer-events: none;
+}
+
+.project-grid .project.project-hidden {
+    display: none;
 }
 
 /* Project Tile */
@@ -390,3 +506,5 @@ footer {
         pointer-events: none;
     }
 }
+
+

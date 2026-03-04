@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <script src="script/projects.js"></script>
     <script defer src="https://unpkg.com/lucide@latest"></script>
 </head>
+
 <body class="dark-mode">
     <header>
         <h1>Raoul Ursum</h1>
@@ -16,24 +18,38 @@
 
     <section id="about">
         <h2>About Me</h2>
-        <p>My passion lies in developing hardware/software for electronic products, with a focus on purposeful and efficient designs. 
-            With my knowledge and experience, I enjoy contributing to innovative solutions that make a positive impact on the world. 
-            After my ICT education, I continue to actively expand my expertise through my hobbies and work experience. 
+        <p>My passion lies in developing hardware/software for electronic products, with a focus on purposeful and
+            efficient designs.
+            With my knowledge and experience, I enjoy contributing to innovative solutions that make a positive impact
+            on the world.
+            After my ICT education, I continue to actively expand my expertise through my hobbies and work experience.
             Have a look at my hobby projects and professional products I have worked on!
-        </p>       
+        </p>
     </section>
 
     <div class="section-divider"></div>
 
     <section id="projects">
-        <h2>Projects</h2>
+        <div class="projects-header">
+            <h2>Projects</h2>
+            <div class="projects-toggle">
+                <span class="projects-toggle-label">Hide work experience</span>
+                <label class="switch" for="show-work-experience" aria-label="Show projects done during working hours">
+                    <input type="checkbox" id="show-work-experience">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
         <div class="project-grid">
             <div class="project">
                 <h3>High Voltage DC-DC Converter</h3>
                 <div class="project-tile">
                     <a href="HV_DC_DC_converter.html">
-                        <img src="images/DC_DC/Screenshot from 2025-02-27 20-40-32.png" alt="High Voltage DC-DC Converter">
-                        <div class="project-overlay"><p>Work in progress...</p></div>
+                        <img src="images/DC_DC/Screenshot from 2025-02-27 20-40-32.png"
+                            alt="High Voltage DC-DC Converter">
+                        <div class="project-overlay">
+                            <p>Work in progress...</p>
+                        </div>
                     </a>
                 </div>
             </div>
@@ -42,16 +58,20 @@
                 <div class="project-tile">
                     <a href="grid_tie_inverter.html">
                         <img src="images/grid_tie_inverter/IMG_20240702_154145812_HDR.jpg" alt="Grid Tie Inverter">
-                        <div class="project-overlay"><p>Work in progress...</p></div>
+                        <div class="project-overlay">
+                            <p>Work in progress...</p>
+                        </div>
                     </a>
                 </div>
             </div>
-            <div class="project">
+            <div class="project" data-work-project="true">
                 <h3>High Voltage BMS System (Invenion)</h3>
                 <div class="project-tile">
                     <a href="high_voltage_BMS_system.html">
                         <img src="images/invenion_BMS/Project-Zero.jpg" alt="High Voltage BMS System">
-                        <div class="project-overlay"><p>Work in progress...</p></div>
+                        <div class="project-overlay">
+                            <p>Work in progress...</p>
+                        </div>
                     </a>
                 </div>
             </div>
@@ -60,25 +80,31 @@
                 <div class="project-tile">
                     <a href="project_car.html">
                         <img src="images/project_car/racetracker_croped_29864271_476096.jpg" alt="Project Car">
-                        <div class="project-overlay"><p>Neverending project...</p></div>
+                        <div class="project-overlay">
+                            <p>Neverending project...</p>
+                        </div>
                     </a>
                 </div>
             </div>
-            <div class="project">
+            <div class="project" data-work-project="true">
                 <h3>Yacht door lock (TiO Products)</h3>
                 <div class="project-tile">
                     <a href="door_lock.html">
                         <img src="images/door_lock/Screenshot from 2025-04-13 22-49-08.png" alt="Yacht door lock">
-                        <div class="project-overlay"><p>December 2023</p></div>
+                        <div class="project-overlay">
+                            <p>December 2023</p>
+                        </div>
                     </a>
                 </div>
             </div>
-            <div class="project">
+            <div class="project" data-work-project="true">
                 <h3>Television Elevator (TiO Products)</h3>
                 <div class="project-tile">
                     <a href="television_elevator.html">
                         <img src="images/tio/Mulder-ThirtySix-BN118-MANA1-51.jpg" alt="Television Elevator">
-                        <div class="project-overlay"><p>March 2022</p></div>
+                        <div class="project-overlay">
+                            <p>March 2022</p>
+                        </div>
                     </a>
                 </div>
             </div>
@@ -87,7 +113,9 @@
                 <div class="project-tile">
                     <a href="school_project_game_board.html">
                         <img src="images/FYS/IMG-20200105-WA0011.jpg" alt="School Project Game Board">
-                        <div class="project-overlay"><p>February 2020</p></div>
+                        <div class="project-overlay">
+                            <p>February 2020</p>
+                        </div>
                     </a>
                 </div>
             </div>
@@ -96,7 +124,9 @@
                 <div class="project-tile">
                     <a href="electric_skateboard.html">
                         <img src="images/electric_skateboard/IMG-20190124-WA0025.jpeg" alt="Electric Skateboard">
-                        <div class="project-overlay"><p>January 2019</p></div>
+                        <div class="project-overlay">
+                            <p>January 2019</p>
+                        </div>
                     </a>
                 </div>
             </div>
@@ -105,7 +135,9 @@
                 <div class="project-tile">
                     <a href="rc_weight_scale.html">
                         <img src="images/rc_weight_scale/IMG_20181123_082024.jpg" alt="RC Weight Scale">
-                        <div class="project-overlay"><p>May 2018</p></div>
+                        <div class="project-overlay">
+                            <p>May 2018</p>
+                        </div>
                     </a>
                 </div>
             </div>
@@ -114,7 +146,9 @@
                 <div class="project-tile">
                     <a href="robot_vacuum.html">
                         <img src="images/robot_vacuum/IMG-20171213-WA0010.jpeg" alt="Robot Vacuum">
-                        <div class="project-overlay"><p>December 2017</p></div>
+                        <div class="project-overlay">
+                            <p>December 2017</p>
+                        </div>
                     </a>
                 </div>
             </div>
@@ -123,7 +157,9 @@
                 <div class="project-tile">
                     <a href="race_drone.html">
                         <img src="images/race_drone/IMG-20160929-WA0015.jpg" alt="Race Drone">
-                        <div class="project-overlay"><p>March 2017</p></div>
+                        <div class="project-overlay">
+                            <p>March 2017</p>
+                        </div>
                     </a>
                 </div>
             </div>
@@ -132,7 +168,9 @@
                 <div class="project-tile">
                     <a href="fdm_core_xy_3d_printer.html">
                         <img src="images/3d_printer/IMG_20200527_140809820.jpg" alt="FDM Core XY 3D Printer">
-                        <div class="project-overlay"><p>August 2016</p></div>
+                        <div class="project-overlay">
+                            <p>August 2016</p>
+                        </div>
                     </a>
                 </div>
             </div>
@@ -141,13 +179,15 @@
                 <div class="project-tile">
                     <a href="camera_drone.html">
                         <img src="images/camera_drone/IMG-20170803-WA0002.jpg" alt="Camera Drone">
-                        <div class="project-overlay"><p>September 2014</p></div>
+                        <div class="project-overlay">
+                            <p>September 2014</p>
+                        </div>
                     </a>
                 </div>
             </div>
         </div>
     </section>
-    
+
 
     <section id="contact">
         <h2>Contact</h2>
@@ -169,7 +209,8 @@
         <p>&copy; <span id="current-year"></span> Raoul Ursum. All rights reserved.</p>
     </footer>
 
-    
+
 
 </body>
+
 </html>
