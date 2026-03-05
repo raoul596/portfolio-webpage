@@ -14,6 +14,62 @@ const projects = [
     { title: "Camera Drone", link: "camera_drone.html" }
 ];
 
+// Thumbnail convention:
+// Full image:  images/folder/photo.jpg
+// Thumbnail:   images/thumbs/folder/photo.jpg
+function toThumbnailPath(src) {
+    if (!src || /^(https?:|data:|blob:)/i.test(src)) {
+        return src;
+    }
+
+    const normalized = src.replace(/\\/g, "/");
+    if (!normalized.startsWith("images/")) {
+        return src;
+    }
+
+    if (normalized.startsWith("images/thumbs/")) {
+        return normalized;
+    }
+
+    return normalized.replace(/^images\//, "images/thumbs/");
+}
+
+function setupThumbnailImages() {
+    const images = document.querySelectorAll(".project-tile img, #project-gallery .image-link img");
+    images.forEach(img => {
+        img.loading = "lazy";
+        img.decoding = "async";
+
+        const explicitFullSrc = img.getAttribute("data-full-src");
+        const fullSrc = img.dataset.fullSrc || explicitFullSrc || img.getAttribute("src");
+        if (!fullSrc) {
+            return;
+        }
+
+        img.dataset.fullSrc = fullSrc;
+
+        // If HTML already provides thumbnail src + explicit full-size source,
+        // keep the thumbnail as-is to avoid triggering full-size downloads.
+        if (explicitFullSrc) {
+            return;
+        }
+
+        const thumbnailSrc = img.dataset.thumbSrc || toThumbnailPath(fullSrc);
+
+        if (!thumbnailSrc || thumbnailSrc === fullSrc) {
+            return;
+        }
+
+        const fallbackToFull = function () {
+            img.removeEventListener("error", fallbackToFull);
+            img.src = fullSrc;
+        };
+
+        img.addEventListener("error", fallbackToFull);
+        img.src = thumbnailSrc;
+    });
+}
+
 // Initialize Lucide icons
 function initializeIcons() {
     if (typeof lucide !== "undefined") {
@@ -68,7 +124,9 @@ function setupImageModal() {
         document.querySelectorAll(".image-link img").forEach(img => {
             img.addEventListener("click", function (event) {
                 event.preventDefault();
-                openModal(this.src);
+                const fullSrc = this.dataset.fullSrc || this.currentSrc || this.src;
+                const previewSrc = this.currentSrc || this.src;
+                openModal(fullSrc, previewSrc);
             });
         });
     }
@@ -82,13 +140,21 @@ function setupImageModal() {
 }
 
 // Open modal with selected image
-function openModal(imageSrc) {
+function openModal(imageSrc, previewSrc) {
     const modal = document.getElementById("image-modal");
     const modalImg = document.getElementById("modal-img");
 
     if (modal && modalImg) {
         modal.style.display = "flex";
-        modalImg.src = imageSrc;
+        modalImg.src = previewSrc || imageSrc;
+
+        if (previewSrc && previewSrc !== imageSrc) {
+            const fullImage = new Image();
+            fullImage.onload = function () {
+                modalImg.src = imageSrc;
+            };
+            fullImage.src = imageSrc;
+        }
     }
 }
 
@@ -227,6 +293,7 @@ function setupWorkProjectsToggle() {
 
 // Initialize everything on page load
 document.addEventListener("DOMContentLoaded", function () {
+    setupThumbnailImages();
     initializeIcons();
     setProjectTitle();
     setNextProject();
