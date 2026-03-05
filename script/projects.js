@@ -135,6 +135,42 @@ function setupImageHoverCursor() {
     });
 }
 
+function setupIndexProjectHoverCursor() {
+    const hasProjectGrid = !!document.querySelector("#projects .project-grid");
+    if (!hasProjectGrid || window.matchMedia("(pointer: coarse)").matches) {
+        return;
+    }
+
+    const links = document.querySelectorAll("#projects .project-tile a");
+    if (!links.length) {
+        return;
+    }
+
+    const cursorEl = document.createElement("div");
+    cursorEl.className = "project-hover-cursor";
+    cursorEl.innerHTML = '<i class="fa-solid fa-arrow-right"></i>';
+    document.body.appendChild(cursorEl);
+
+    const placeCursor = event => {
+        cursorEl.style.left = `${event.clientX + 12}px`;
+        cursorEl.style.top = `${event.clientY + 12}px`;
+    };
+
+    links.forEach(link => {
+        link.addEventListener("mouseenter", () => {
+            cursorEl.classList.add("visible");
+            link.style.cursor = "none";
+        });
+
+        link.addEventListener("mousemove", placeCursor);
+
+        link.addEventListener("mouseleave", () => {
+            cursorEl.classList.remove("visible");
+            link.style.cursor = "pointer";
+        });
+    });
+}
+
 // Initialize Lucide icons
 function initializeIcons() {
     if (typeof lucide !== "undefined") {
@@ -361,6 +397,7 @@ document.addEventListener("DOMContentLoaded", function () {
     setupThumbnailImages();
     ensureFontAwesomeForProjectPages();
     setupImageHoverCursor();
+    setupIndexProjectHoverCursor();
     initializeIcons();
     setProjectTitle();
     setNextProject();

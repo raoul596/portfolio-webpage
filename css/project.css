@@ -142,16 +142,9 @@
     position: fixed;
     z-index: 1200;
     pointer-events: none;
-    width: 28px;
-    height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: block;
     color: #ffffff;
-    background: rgba(0, 107, 82, 0.9);
-    border: 1px solid rgba(255, 255, 255, 0.35);
-    border-radius: 50%;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+    font-size: 1rem;
     opacity: 0;
     transform: scale(0.92);
     transition: opacity 0.14s ease, transform 0.14s ease;
@@ -248,3 +241,5 @@
         font-size: 12px;
     }
 }
+
+
