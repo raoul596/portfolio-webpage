@@ -1,9 +1,9 @@
 const projects = [
     { title: "High Voltage DC-DC Converter", link: "HV_DC_DC_converter.html" },
     { title: "Grid Tie Inverter", link: "grid_tie_inverter.html" },
-    { title: "High Voltage BMS System", link: "high_voltage_BMS_system.html" },
-    { title: "Yacht door lock", link: "door_lock.html" },
-    { title: "Television Elevator", link: "television_elevator.html" },
+    { title: "High Voltage BMS System", link: "high_voltage_BMS_system.html", workExperience: true },
+    { title: "Yacht door lock", link: "door_lock.html", workExperience: true },
+    { title: "Television Elevator", link: "television_elevator.html", workExperience: true },
     { title: "Project Car", link: "project_car.html" },
     { title: "School Project Game Board", link: "school_project_game_board.html" },
     { title: "Electric Skateboard", link: "electric_skateboard.html" },
@@ -107,14 +107,15 @@ function setupWorkProjectsToggle() {
         return;
     }
 
-    const workProjectMarkers = ["(invenion)", "(tio products)", "(vleugel automation)"];
     const projectCards = document.querySelectorAll(".project-grid .project");
+    const workExperienceLinks = new Set(
+        projects.filter(project => project.workExperience).map(project => project.link)
+    );
 
     projectCards.forEach(card => {
-        const titleText = (card.querySelector("h3")?.textContent || "").toLowerCase();
-        const isMarkedByTitle = workProjectMarkers.some(marker => titleText.includes(marker));
-        const isMarkedByAttribute = card.dataset.workProject === "true";
-        card.dataset.workProject = (isMarkedByTitle || isMarkedByAttribute) ? "true" : "false";
+        const projectLink = card.querySelector(".project-tile a")?.getAttribute("href")?.split("/").pop();
+        const isWorkProject = projectLink ? workExperienceLinks.has(projectLink) : false;
+        card.dataset.workProject = isWorkProject ? "true" : "false";
     });
 
     const transitionMs = 260;
