@@ -34,6 +34,14 @@ function toThumbnailPath(src) {
     return normalized.replace(/^images\//, "images/thumbs/");
 }
 
+function toFullSizePathFromThumb(src) {
+    if (!src) {
+        return src;
+    }
+
+    return src.replace("/images/thumbs/", "/images/").replace("images/thumbs/", "images/");
+}
+
 function setupThumbnailImages() {
     const images = document.querySelectorAll(".project-tile img, #project-gallery .image-link img");
     images.forEach(img => {
@@ -41,24 +49,17 @@ function setupThumbnailImages() {
         img.decoding = "async";
 
         const explicitFullSrc = img.getAttribute("data-full-src");
-        const fullSrc = img.dataset.fullSrc || explicitFullSrc || img.getAttribute("src");
+        const currentSrc = img.getAttribute("src");
+        const inferredFullSrc = currentSrc && currentSrc.includes("images/thumbs/")
+            ? toFullSizePathFromThumb(currentSrc)
+            : currentSrc;
+        const fullSrc = img.dataset.fullSrc || explicitFullSrc || inferredFullSrc;
         if (!fullSrc) {
             return;
         }
 
         img.dataset.fullSrc = fullSrc;
-
-        // If HTML already provides thumbnail src + explicit full-size source,
-        // keep the thumbnail as-is to avoid triggering full-size downloads.
-        if (explicitFullSrc) {
-            return;
-        }
-
-        const thumbnailSrc = img.dataset.thumbSrc || toThumbnailPath(fullSrc);
-
-        if (!thumbnailSrc || thumbnailSrc === fullSrc) {
-            return;
-        }
+        const thumbnailSrc = img.dataset.thumbSrc || currentSrc || toThumbnailPath(fullSrc);
 
         const fallbackToFull = function () {
             img.removeEventListener("error", fallbackToFull);
@@ -66,7 +67,71 @@ function setupThumbnailImages() {
         };
 
         img.addEventListener("error", fallbackToFull);
-        img.src = thumbnailSrc;
+
+        // Keep provided thumbnail path when present; otherwise swap to derived thumbnail.
+        if (!currentSrc || !currentSrc.includes("images/thumbs/")) {
+            const derivedThumbSrc = toThumbnailPath(fullSrc);
+            if (derivedThumbSrc && derivedThumbSrc !== fullSrc) {
+                img.src = derivedThumbSrc;
+            }
+        } else if (!thumbnailSrc) {
+            img.src = fullSrc;
+        }
+    });
+}
+
+function ensureFontAwesomeForProjectPages() {
+    const hasProjectGallery = !!document.getElementById("project-gallery");
+    if (!hasProjectGallery) {
+        return;
+    }
+
+    const alreadyLoaded = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
+        .some(link => (link.href || "").includes("font-awesome"));
+
+    if (alreadyLoaded) {
+        return;
+    }
+
+    const faLink = document.createElement("link");
+    faLink.rel = "stylesheet";
+    faLink.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css";
+    document.head.appendChild(faLink);
+}
+
+function setupImageHoverCursor() {
+    const hasProjectGallery = !!document.getElementById("project-gallery");
+    if (!hasProjectGallery || window.matchMedia("(pointer: coarse)").matches) {
+        return;
+    }
+
+    const links = document.querySelectorAll("#project-gallery .image-link");
+    if (!links.length) {
+        return;
+    }
+
+    const cursorEl = document.createElement("div");
+    cursorEl.className = "image-hover-cursor";
+    cursorEl.innerHTML = '<i class="fa-solid fa-magnifying-glass-plus"></i>';
+    document.body.appendChild(cursorEl);
+
+    const placeCursor = event => {
+        cursorEl.style.left = `${event.clientX + 12}px`;
+        cursorEl.style.top = `${event.clientY + 12}px`;
+    };
+
+    links.forEach(link => {
+        link.addEventListener("mouseenter", () => {
+            cursorEl.classList.add("visible");
+            link.style.cursor = "none";
+        });
+
+        link.addEventListener("mousemove", placeCursor);
+
+        link.addEventListener("mouseleave", () => {
+            cursorEl.classList.remove("visible");
+            link.style.cursor = "zoom-in";
+        });
     });
 }
 
@@ -294,6 +359,8 @@ function setupWorkProjectsToggle() {
 // Initialize everything on page load
 document.addEventListener("DOMContentLoaded", function () {
     setupThumbnailImages();
+    ensureFontAwesomeForProjectPages();
+    setupImageHoverCursor();
     initializeIcons();
     setProjectTitle();
     setNextProject();
