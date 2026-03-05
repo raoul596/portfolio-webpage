@@ -58,15 +58,15 @@
     transition: transform 0.25s ease;
 }
 
-.switch input:checked + .slider {
+.switch input:checked+.slider {
     background-color: var(--accent);
 }
 
-.switch input:checked + .slider::before {
+.switch input:checked+.slider::before {
     transform: translateX(24px);
 }
 
-.switch input:focus-visible + .slider {
+.switch input:focus-visible+.slider {
     outline: 2px solid var(--hover);
     outline-offset: 2px;
 }
@@ -101,7 +101,8 @@
 .project-tile {
     position: relative;
     width: 100%;
-    padding-top: 56.25%; /* 16:9 aspect ratio */
+    padding-top: 56.25%;
+    /* 16:9 aspect ratio */
     border-radius: 10px;
     overflow: hidden;
 }
@@ -137,8 +138,52 @@
     color: var(--light);
 }
 
+.project-overlay p {
+    font-weight: 700;
+}
+
+.project-overlay::after {
+    content: "VIEW PROJECT";
+    position: absolute;
+    right: 36px;
+    bottom: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.04em;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    transition-delay: 0s;
+}
+
+.project-overlay::before {
+    content: "\f061";
+    position: absolute;
+    right: 14px;
+    bottom: 12px;
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 1rem;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    transition-delay: 0s;
+}
+
 .project-tile:hover .project-overlay {
     opacity: 1;
+}
+
+.project-tile:hover .project-overlay::after {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.3s;
+}
+
+.project-tile:hover .project-overlay::before {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.3s;
 }
 
 @media (max-width: 992px) {
