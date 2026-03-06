@@ -49,7 +49,7 @@
 
 .image-row {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     gap: 20px;
     margin: 40px auto;

@@ -68,7 +68,9 @@ footer {
     text-align: justify;
     text-justify: inter-word;
     text-align-last: left;
-    hyphens: auto;
+    hyphens: none;
+    -webkit-hyphens: none;
+    -ms-hyphens: none;
 }
 
 #project-description {
@@ -82,7 +84,9 @@ footer {
     text-align: justify;
     text-justify: inter-word;
     text-align-last: left;
-    hyphens: auto;
+    hyphens: none;
+    -webkit-hyphens: none;
+    -ms-hyphens: none;
 }
 
 /* Skills Section */
