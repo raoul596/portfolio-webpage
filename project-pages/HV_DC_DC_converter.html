@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
     <script src="../script/projects.js"></script>
     <script defer src="https://unpkg.com/lucide@latest"></script>
 </head>
+
 <body class="dark-mode">
 
     <header class="project-header">
@@ -23,21 +25,25 @@
 
     <section id="project-description">
         <h2>Project Overview</h2>
-        <p>
-            Write a detailed description of your project, including its purpose, technologies used, 
+        <!-- <p>
+            Write a detailed description of your project, including its purpose, technologies used,
             and key challenges faced.
+        </p> -->
 
-            For the grid tie inverter 
-        </p>
+        <p> As a complementary component of the <a href="project-pages/grid_tie_inverter.html">Grid tie inverter</a> I
+            need a way to create a high voltage DC as input for the grid tie inverter. The goal here is to be able to
+            convert battery pack voltage of max 60V to 400V bi-directonally with high efficiency in mind.</p>
     </section>
 
     <section id="project-gallery">
         <h2>Project Images</h2>
 
-        <div class="image-row">
+        <div class="image-row" data-step-id="step1">
             <div class="image-container">
                 <a href="#" class="image-link">
-                    <img src="../images/thumbs/DC_DC/Screenshot from 2025-02-27 20-40-32.png" data-full-src="../images/DC_DC/Screenshot from 2025-02-27 20-40-32.png" alt="Project Car">
+                    <img src="../images/thumbs/DC_DC/step1 2025-02-27 20-40-32.png"
+                        data-full-src="../images/DC_DC/Screenshot from 2025-02-27 20-40-32.png"
+                        alt="KiCAD 3D model of PCB">
                 </a>
             </div>
             <div class="text-container">
@@ -47,28 +53,16 @@
                 </p>
             </div>
         </div>
-        
-        <div class="image-row">
+
+        <div class="image-row" data-step-id="step2">
             <div class="image-container">
                 <a href="#" class="image-link">
-                    <img src="../images/thumbs/DC_DC/IMG_20250521_105836948.jpg" data-full-src="../images/DC_DC/IMG_20250521_105836948.jpg" alt="Project Car">
+                    <img src="../images/thumbs/DC_DC/step2 front_pcb.jpg"
+                        data-full-src="../images/DC_DC/step2 front_pcb.jpg" alt="Project Car">
                 </a>
             </div>
             <div class="text-container">
                 <h3>Step 2</h3>
-                <p>Explain what is happening in this image. Explain what is happening in this image.
-                </p>
-            </div>
-        </div>
-        
-        <div class="image-row">
-            <div class="image-container">
-                <a href="#" class="image-link">
-                    <img src="../images/thumbs/DC_DC/IMG_20250521_105843237.jpg" data-full-src="../images/DC_DC/IMG_20250521_105843237.jpg" alt="Project Car">
-                </a>
-            </div>
-            <div class="text-container">
-                <h3>Step 3</h3>
                 <p>Explain what is happening in this image. Explain what is happening in this image.
                 </p>
             </div>
@@ -101,7 +95,5 @@
     </footer>
 
 </body>
+
 </html>
-
-
-

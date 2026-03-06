@@ -23,15 +23,15 @@ function toThumbnailPath(src) {
     }
 
     const normalized = src.replace(/\\/g, "/");
-    if (!normalized.startsWith("images/")) {
-        return src;
-    }
-
-    if (normalized.startsWith("images/thumbs/")) {
+    if (normalized.includes("images/thumbs/")) {
         return normalized;
     }
 
-    return normalized.replace(/^images\//, "images/thumbs/");
+    if (normalized.includes("images/")) {
+        return normalized.replace("images/", "images/thumbs/");
+    }
+
+    return src;
 }
 
 function toFullSizePathFromThumb(src) {
@@ -39,7 +39,10 @@ function toFullSizePathFromThumb(src) {
         return src;
     }
 
-    return src.replace("/images/thumbs/", "/images/").replace("images/thumbs/", "images/");
+    return src
+        .replace(/\\/g, "/")
+        .replace("/images/thumbs/", "/images/")
+        .replace("images/thumbs/", "images/");
 }
 
 function setupThumbnailImages() {
@@ -101,7 +104,7 @@ function ensureFontAwesomeForProjectPages() {
 
 function setupImageHoverCursor() {
     const hasProjectGallery = !!document.getElementById("project-gallery");
-    if (!hasProjectGallery || window.matchMedia("(pointer: coarse)").matches) {
+    if (!hasProjectGallery) {
         return;
     }
 
@@ -110,34 +113,14 @@ function setupImageHoverCursor() {
         return;
     }
 
-    const cursorEl = document.createElement("div");
-    cursorEl.className = "image-hover-cursor";
-    cursorEl.innerHTML = '<i class="fa-solid fa-magnifying-glass-plus"></i>';
-    document.body.appendChild(cursorEl);
-
-    const placeCursor = event => {
-        cursorEl.style.left = `${event.clientX + 12}px`;
-        cursorEl.style.top = `${event.clientY + 12}px`;
-    };
-
     links.forEach(link => {
-        link.addEventListener("mouseenter", () => {
-            cursorEl.classList.add("visible");
-            link.style.cursor = "none";
-        });
-
-        link.addEventListener("mousemove", placeCursor);
-
-        link.addEventListener("mouseleave", () => {
-            cursorEl.classList.remove("visible");
-            link.style.cursor = "zoom-in";
-        });
+        link.style.cursor = "zoom-in";
     });
 }
 
 function setupIndexProjectHoverCursor() {
     const hasProjectGrid = !!document.querySelector("#projects .project-grid");
-    if (!hasProjectGrid || window.matchMedia("(pointer: coarse)").matches) {
+    if (!hasProjectGrid) {
         return;
     }
 
@@ -146,28 +129,8 @@ function setupIndexProjectHoverCursor() {
         return;
     }
 
-    const cursorEl = document.createElement("div");
-    cursorEl.className = "project-hover-cursor";
-    cursorEl.innerHTML = '<i class="fa-solid fa-arrow-right"></i>';
-    document.body.appendChild(cursorEl);
-
-    const placeCursor = event => {
-        cursorEl.style.left = `${event.clientX + 12}px`;
-        cursorEl.style.top = `${event.clientY + 12}px`;
-    };
-
     links.forEach(link => {
-        link.addEventListener("mouseenter", () => {
-            cursorEl.classList.add("visible");
-            link.style.cursor = "none";
-        });
-
-        link.addEventListener("mousemove", placeCursor);
-
-        link.addEventListener("mouseleave", () => {
-            cursorEl.classList.remove("visible");
-            link.style.cursor = "pointer";
-        });
+        link.style.cursor = "pointer";
     });
 }
 
@@ -238,6 +201,258 @@ function setupImageModal() {
             closeModal();
         }
     });
+}
+
+function getBaseFileName(path) {
+    if (!path) {
+        return "";
+    }
+
+    const normalized = path.replace(/\\/g, "/");
+    const fileName = normalized.substring(normalized.lastIndexOf("/") + 1);
+    return decodeURIComponent(fileName).toLowerCase();
+}
+
+function getDirectoryPath(path) {
+    if (!path) {
+        return "";
+    }
+
+    const normalized = path.replace(/\\/g, "/");
+    const idx = normalized.lastIndexOf("/");
+    return idx === -1 ? "" : normalized.substring(0, idx + 1);
+}
+
+function extractStepToken(path) {
+    const baseName = getBaseFileName(path);
+    const match = baseName.match(/^(step[0-9a-z_-]*)/i);
+    return match ? match[1].toLowerCase() : "";
+}
+
+function uniqueEntriesByFullSrc(entries) {
+    const seen = new Set();
+
+    const normalizePathKey = path => {
+        if (!path) {
+            return "";
+        }
+
+        try {
+            return decodeURIComponent(path)
+                .replace(/\\/g, "/")
+                .replace(/[?#].*$/, "")
+                .toLowerCase();
+        } catch {
+            return path
+                .replace(/\\/g, "/")
+                .replace(/[?#].*$/, "")
+                .toLowerCase();
+        }
+    };
+
+    return entries.filter(entry => {
+        if (!entry || !entry.fullSrc) {
+            return false;
+        }
+
+        const key = normalizePathKey(entry.fullSrc);
+        if (seen.has(key)) {
+            return false;
+        }
+
+        seen.add(key);
+        return true;
+    });
+}
+
+async function collectStepImagesFromDirectory(directoryPath, stepId) {
+    if (!directoryPath || !stepId) {
+        return [];
+    }
+
+    try {
+        const response = await fetch(directoryPath, { cache: "no-store" });
+        if (!response.ok) {
+            return [];
+        }
+
+        const html = await response.text();
+        const doc = new DOMParser().parseFromString(html, "text/html");
+        const links = Array.from(doc.querySelectorAll("a[href]"));
+        const files = [];
+
+        links.forEach(link => {
+            const href = link.getAttribute("href");
+            if (!href || href.endsWith("/")) {
+                return;
+            }
+
+            const decodedName = decodeURIComponent(href);
+            if (extractStepToken(decodedName) !== stepId) {
+                return;
+            }
+
+            const fullSrc = `${directoryPath}${href}`;
+            files.push({
+                fullSrc,
+                thumbSrc: toThumbnailPath(fullSrc),
+                alt: `${stepId} image`
+            });
+        });
+
+        return files;
+    } catch {
+        return [];
+    }
+}
+
+function setupSlideshowForStepRow(stepId, anchorRow, slideshowEntries) {
+    const entries = uniqueEntriesByFullSrc(slideshowEntries);
+    if (entries.length < 2) {
+        return;
+    }
+
+    const targetImg = anchorRow.querySelector(".image-link img");
+    const imageContainer = anchorRow.querySelector(".image-container");
+    if (!targetImg || !imageContainer) {
+        return;
+    }
+
+    let currentIndex = 0;
+    let pauseOnDotHover = false;
+    let dots = [];
+
+    const applySlide = entry => {
+        targetImg.dataset.fullSrc = entry.fullSrc;
+        targetImg.src = entry.thumbSrc || entry.fullSrc;
+        targetImg.alt = entry.alt;
+        dots.forEach((dot, index) => {
+            dot.classList.toggle("active", index === currentIndex);
+        });
+    };
+
+    const dotsContainer = document.createElement("div");
+    dotsContainer.className = "slideshow-dots";
+    dotsContainer.setAttribute("aria-label", `${stepId} slideshow navigation`);
+
+    dots = entries.map((entry, index) => {
+        const dot = document.createElement("button");
+        dot.type = "button";
+        dot.className = "slideshow-dot";
+        dot.setAttribute("aria-label", `Show ${stepId} image ${index + 1}`);
+
+        dot.addEventListener("mouseenter", () => {
+            pauseOnDotHover = true;
+            currentIndex = index;
+            applySlide(entries[currentIndex]);
+        });
+
+        dot.addEventListener("focus", () => {
+            pauseOnDotHover = true;
+            currentIndex = index;
+            applySlide(entries[currentIndex]);
+        });
+
+        dot.addEventListener("click", () => {
+            currentIndex = index;
+            applySlide(entries[currentIndex]);
+        });
+
+        return dot;
+    });
+
+    dots.forEach(dot => dotsContainer.appendChild(dot));
+    dotsContainer.addEventListener("mouseleave", () => {
+        pauseOnDotHover = false;
+    });
+    imageContainer.appendChild(dotsContainer);
+
+    applySlide(entries[currentIndex]);
+
+    setInterval(() => {
+        if (pauseOnDotHover) {
+            return;
+        }
+
+        currentIndex = (currentIndex + 1) % entries.length;
+        applySlide(entries[currentIndex]);
+    }, 2500);
+}
+
+async function setupStepSlideshows() {
+    const rows = Array.from(document.querySelectorAll("#project-gallery .image-row"));
+    if (!rows.length) {
+        return;
+    }
+
+    const stepRows = rows.filter(row => {
+        const stepId = (row.dataset.stepId || "").trim().toLowerCase();
+        return stepId.startsWith("step");
+    });
+    if (!stepRows.length) {
+        return;
+    }
+
+    const stepGroups = new Map();
+    stepRows.forEach(row => {
+        const stepId = row.dataset.stepId.trim().toLowerCase();
+        if (!stepGroups.has(stepId)) {
+            stepGroups.set(stepId, []);
+        }
+        stepGroups.get(stepId).push(row);
+    });
+
+    for (const [stepId, groupedRows] of stepGroups.entries()) {
+        const anchorRow = groupedRows[0];
+        const extraRows = groupedRows.slice(1);
+
+        const rowImages = rows.map(row => {
+            const img = row.querySelector(".image-link img");
+            if (!img) {
+                return null;
+            }
+
+            const fullSrc = img.dataset.fullSrc || img.getAttribute("data-full-src") || img.getAttribute("src");
+            const thumbOrSrc = img.getAttribute("src") || "";
+            const fullStepToken = extractStepToken(fullSrc);
+            const thumbStepToken = extractStepToken(thumbOrSrc);
+            const stepToken = fullStepToken || thumbStepToken;
+            if (stepToken !== stepId) {
+                return null;
+            }
+
+            // If data-full-src does not belong to this step but src does, prefer src-derived full path.
+            const canonicalFullSrc = (!fullStepToken && thumbStepToken === stepId)
+                ? toFullSizePathFromThumb(thumbOrSrc)
+                : fullSrc;
+
+            return {
+                fullSrc: canonicalFullSrc,
+                thumbSrc: img.getAttribute("src"),
+                alt: img.getAttribute("alt") || `${stepId} image`
+            };
+        });
+        const slideshowEntries = rowImages.filter(Boolean);
+
+        const anchorImg = anchorRow.querySelector(".image-link img");
+        const anchorFullSrc = anchorImg
+            ? (anchorImg.dataset.fullSrc || anchorImg.getAttribute("data-full-src") || anchorImg.getAttribute("src"))
+            : "";
+        const stepDirectory = getDirectoryPath(anchorFullSrc || (slideshowEntries[0] && slideshowEntries[0].fullSrc) || "");
+        const folderEntries = await collectStepImagesFromDirectory(stepDirectory, stepId);
+
+        const combinedEntries = uniqueEntriesByFullSrc([
+            ...slideshowEntries,
+            ...folderEntries
+        ]);
+
+        if (combinedEntries.length < 2) {
+            continue;
+        }
+
+        extraRows.forEach(row => row.remove());
+        setupSlideshowForStepRow(stepId, anchorRow, combinedEntries);
+    }
 }
 
 // Open modal with selected image
@@ -395,6 +610,7 @@ function setupWorkProjectsToggle() {
 // Initialize everything on page load
 document.addEventListener("DOMContentLoaded", function () {
     setupThumbnailImages();
+    setupStepSlideshows();
     ensureFontAwesomeForProjectPages();
     setupImageHoverCursor();
     setupIndexProjectHoverCursor();
