@@ -132,6 +132,24 @@
     text-align: left;
 }
 
+#project-description a {
+    color: var(--hover);
+    text-decoration-color: rgba(0, 161, 123, 0.55);
+    text-underline-offset: 0.14em;
+    transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+#project-description a:visited {
+    color: #63d6b9;
+}
+
+#project-description a:hover,
+#project-description a:focus-visible {
+    color: #8ff3dc;
+    text-decoration-color: currentColor;
+    outline: none;
+}
+
 .image-link::before {
     content: "Click to enlarge";
     position: absolute;
