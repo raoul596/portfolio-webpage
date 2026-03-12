@@ -7,6 +7,17 @@ param(
 
 Add-Type -AssemblyName System.Drawing
 
+$scriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
+$repoRoot = Split-Path -Parent (Split-Path -Parent $scriptRoot)
+
+if (-not [System.IO.Path]::IsPathRooted($SourceRoot)) {
+    $SourceRoot = Join-Path $repoRoot $SourceRoot
+}
+
+if (-not [System.IO.Path]::IsPathRooted($ThumbRoot)) {
+    $ThumbRoot = Join-Path $repoRoot $ThumbRoot
+}
+
 if (!(Test-Path $SourceRoot)) {
     throw "Source folder '$SourceRoot' does not exist."
 }
@@ -77,4 +88,3 @@ Get-ChildItem -Path $sourceRootResolved -Recurse -File | ForEach-Object {
         if ($srcImage) { $srcImage.Dispose() }
     }
 }
-
