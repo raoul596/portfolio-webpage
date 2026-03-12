@@ -132,6 +132,20 @@
     text-align: left;
 }
 
+.text-container h3 {
+    margin-top: 0;
+}
+
+.text-container p,
+.text-container li {
+    text-align: justify;
+    text-justify: inter-word;
+    text-align-last: left;
+    hyphens: none;
+    -webkit-hyphens: none;
+    -ms-hyphens: none;
+}
+
 #project-description a {
     color: var(--hover);
     text-decoration-color: rgba(0, 161, 123, 0.55);
