@@ -134,6 +134,11 @@
 
 .text-container h3 {
     margin-top: 0;
+    margin-bottom: 0.25rem;
+}
+
+.text-container p:first-of-type {
+    margin-top: 0;
 }
 
 .text-container p,
