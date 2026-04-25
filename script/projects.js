@@ -87,8 +87,8 @@ function setupThumbnailImages() {
 }
 
 function ensureFontAwesomeForProjectPages() {
-    const hasProjectGallery = !!document.getElementById("project-gallery");
-    if (!hasProjectGallery) {
+    const needsFontAwesome = !!document.querySelector("#project-gallery, .contact-icons");
+    if (!needsFontAwesome) {
         return;
     }
 
@@ -103,6 +103,24 @@ function ensureFontAwesomeForProjectPages() {
     faLink.rel = "stylesheet";
     faLink.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css";
     document.head.appendChild(faLink);
+}
+
+function setupContactBrandIcons() {
+    const brandIconClasses = {
+        github: ["fa-brands", "fa-github"],
+        linkedin: ["fa-brands", "fa-linkedin-in"]
+    };
+
+    document.querySelectorAll(".contact-icons [data-lucide]").forEach(icon => {
+        const iconName = icon.getAttribute("data-lucide");
+        const classes = brandIconClasses[iconName];
+        if (!classes) {
+            return;
+        }
+
+        icon.removeAttribute("data-lucide");
+        icon.classList.add(...classes);
+    });
 }
 
 function setupImageHoverCursor() {
@@ -782,6 +800,7 @@ document.addEventListener("DOMContentLoaded", function () {
     setupThumbnailImages();
     setupStepSlideshows();
     ensureFontAwesomeForProjectPages();
+    setupContactBrandIcons();
     setupImageHoverCursor();
     setupIndexProjectHoverCursor();
     initializeIcons();

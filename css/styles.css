@@ -135,8 +135,10 @@ footer {
 }
 
 .contact-btn {
-    font-size: 30px;
+    --contact-icon-size: 24px;
+    font-size: var(--contact-icon-size);
     color: var(--accent);
+    text-decoration: none;
     transition: color 0.3s, transform 0.2s;
     display: flex;
     align-items: center;
@@ -145,6 +147,19 @@ footer {
     height: 50px;
     border-radius: 50%;
     background: var(--secondary-dark);
+}
+
+.contact-btn svg,
+.contact-btn .fa-brands {
+    width: var(--contact-icon-size);
+    height: var(--contact-icon-size);
+}
+
+.contact-btn .fa-brands {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
 }
 
 .contact-btn:hover {
