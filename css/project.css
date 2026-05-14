@@ -151,19 +151,23 @@
     -ms-hyphens: none;
 }
 
-#project-description a {
+#project-description a,
+.text-container a {
     color: var(--hover);
     text-decoration-color: rgba(0, 161, 123, 0.55);
     text-underline-offset: 0.14em;
     transition: color 0.2s ease, text-decoration-color 0.2s ease;
 }
 
-#project-description a:visited {
+#project-description a:visited,
+.text-container a:visited {
     color: #63d6b9;
 }
 
 #project-description a:hover,
-#project-description a:focus-visible {
+#project-description a:focus-visible,
+.text-container a:hover,
+.text-container a:focus-visible {
     color: #8ff3dc;
     text-decoration-color: currentColor;
     outline: none;

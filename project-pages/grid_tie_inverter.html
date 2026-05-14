@@ -27,7 +27,7 @@
         <h2>Project Overview</h2>
         <!-- <p>Write a detailed description of your project, including its purpose, technologies used, and key challenges
             faced.</p> -->
-        <p>Based on the grid tied inverter version 5 build by <a href="https://jamesfotherby.com">J. Fortherby</a>. I
+        <p>Based on the grid tied inverter V5 build by <a href="https://jamesfotherby.com">J. Fortherby</a>. I
             want to experiment with this myself. For a future project I would like to be able to store solar energy in a
             battery and use this stored energy during peak hours to run my house. Because this is a hot topic at the
             time of writing I would like to get knowledge about inverter designs and software and how efficiency can be
@@ -48,8 +48,9 @@
                 <h3>Getting started</h3>
                 <p>I first read about this project on <a
                         href="https://www.instructables.com/member/fotherby/">Instructables</a>. Here I saw multiple
-                    versions if the ivnerter and read all the guides
-                    made by J. Fortherby.
+                    versions of the ivnerter and read all the guides made by J. Fortherby. Only the first four
+                    iterations are placed on Instructables. His future progress visit his site: <a
+                        href="https://jamesfotherby.com">jamesfotherby.com</a>
                 </p>
             </div>
         </div>
@@ -65,9 +66,12 @@
             <div class="text-container">
                 <h3>Modifying the design</h3>
                 <p>Because efficiency is importend for me I want to experiment with GaN type FETs, which J. Fortherby
-                    used in this previous design V4. They exploded because ........................ was not working. But
-                    I read that in V5 he got this to work, so I want to give it a try with the GaN type FETs. Also I
-                    changed the PCB to my likings like a tag-connect for uploading and debugging the PCB.
+                    used in V4. According to his blog they exploded because the DFSDM analogue watchdog was not working
+                    in V4, which he fixed in V5. For me a reason to reintroduce the GaN type FETs! But I wanted to use
+                    his improved filtering used on V5, so I took the schematic of the V5 PCB and added the GaN FETs
+                    onto this design. Also I changed the PCB to my likings like a tag-connect for uploading and
+                    debugging the PCB. Also I did not like that some componenst were on the back side of the PCB, so I
+                    moved them over.
                 </p>
             </div>
         </div>
@@ -80,8 +84,29 @@
                 </a>
             </div>
             <div class="text-container">
-                <h3>Step 3</h3>
-                <p>Explain what is happening in this image. Explain what is happening in this image.
+                <h3>Initial testing</h3>
+                <p>Before doing real test on mains power I tested the logic section of the PCB. Only problem I found was
+                    my linear regulator which is designed too small, so I soldered on a THT TO-220 sized linear
+                    regulator. I know these are not efficient, but for now they speed up prototyping. Later when
+                    everything works as excpected I will upgrade to a switched power supply.
+                </p>
+            </div>
+        </div>
+
+        <div class="image-row">
+            <div class="image-container">
+                <a href="#" class="image-link">
+                    <img src="../images/thumbs/grid_tie_inverter/IMG_20250521_105831170.jpg"
+                        data-full-src="../images/grid_tie_inverter/IMG_20250521_105831170.jpg" alt="Grid Tie Inverter">
+                </a>
+            </div>
+            <div class="text-container">
+                <h3>First time putting power into the grid</h3>
+                <p>Now everything on the low voltage side is working I used a 10:1 transformer, so I can start testing
+                    and keep the voltage on the PCB safe. Now I can test the Phase-Locked loop (PLL) for the first time
+                    which worked first time. The inverter even started to to push power back
+                    into the grid! Since I want to control the power going into the grid I added ......................
+                    in software.
                 </p>
             </div>
         </div>
